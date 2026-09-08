@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.py[cod]
+users_follow_back.txt
+users_dont_follow_back.txt
+users_not_found.txt
