@@ -1,47 +1,18 @@
-# Instagram Automation Toolkit
+# Instagram Browser Automation — Archived
 
-Python/Selenium utilities for browser-based Instagram workflows, including checking follow relationships and sending reels to selected users.
+> **Status: archived / personal experiment.** This repository is not recommended as a portfolio project.
 
-## Features
+The project contains Selenium-based experiments for checking Instagram profiles and sending reels. These workflows depend on Instagram's changing web UI and may break without notice.
 
-- Headless Firefox automation with Selenium
-- Environment-based credential configuration
-- Command-line control for reel sharing
-- Exported text reports for follow-status checks
+## Why it is archived
 
-## Setup
+- Platform-specific CSS/DOM selectors are brittle.
+- Browser automation is difficult to test reliably without a live account.
+- Authentication and anti-automation behavior can change independently of the code.
+- The project does not demonstrate as much transferable engineering value as the other portfolio projects in this account.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-```
+Credentials must never be committed. Use environment variables for any local experimentation and follow the platform's current terms and policies.
 
-Set your credentials in `.env`:
+## Portfolio recommendation
 
-```text
-INSTAGRAM_USERNAME=your_username
-INSTAGRAM_PASSWORD=your_password
-```
-
-Never commit `.env` or passwords to source control.
-
-## Usage
-
-```bash
-python send_reels.py --users username1 username2 --reels 3
-python follow_check.py
-```
-
-Instagram's UI and automation behavior can change, so Selenium selectors may need maintenance as the site evolves.
-
-## Tech Stack
-
-**Python · Selenium · Firefox WebDriver · BeautifulSoup · CLI Automation**
-
-## Resume Description
-
-**Instagram Automation Toolkit | Python, Selenium**
-
-Built browser-automation utilities with Selenium and headless Firefox to streamline repeatable Instagram workflows, added CLI-driven execution and environment-based credential handling, and separated browser setup, authentication, reporting, and workflow logic for maintainability.
+Keep this repository available as a personal experiment, but prioritize **Flight-Alert-System**, **RAG-Sytem**, **Fourier-Image-Drawing**, **Seq2Seq-Model**, **sudoku**, and **LRU-Cache** on a resume or portfolio.
