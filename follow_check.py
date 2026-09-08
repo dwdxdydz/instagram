@@ -10,7 +10,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
@@ -19,21 +19,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 load_dotenv()
 
-ACCOUNT_USERNAME = os.getenv("INSTAGRAM_USERNAME")
-ACCOUNT_PASSWORD = os.getenv("INSTAGRAM_PASSWORD")
-
-
 def login_instagram(driver: webdriver.Firefox) -> None:
     """Log in using environment-configured credentials."""
-    if not ACCOUNT_USERNAME or not ACCOUNT_PASSWORD:
+    account_username = os.getenv("INSTAGRAM_USERNAME")
+    account_password = os.getenv("INSTAGRAM_PASSWORD")
+    if not account_username or not account_password:
         raise RuntimeError("Set INSTAGRAM_USERNAME and INSTAGRAM_PASSWORD in .env")
 
     driver.get("https://www.instagram.com/accounts/login/")
     username_input = WebDriverWait(driver, 15).until(
         EC.visibility_of_element_located((By.NAME, "username"))
     )
-    username_input.send_keys(ACCOUNT_USERNAME)
-    driver.find_element(By.NAME, "password").send_keys(ACCOUNT_PASSWORD, Keys.RETURN)
+    username_input.send_keys(account_username)
+    driver.find_element(By.NAME, "password").send_keys(account_password, Keys.RETURN)
     WebDriverWait(driver, 15).until(EC.url_contains("instagram.com"))
 
 
@@ -47,6 +45,19 @@ def create_driver() -> webdriver.Firefox:
     return webdriver.Firefox(options=options)
 
 
+def username_and_follows_you(item) -> tuple[str, bool] | None:
+    """Extract a username and its follow-back status from a following-list item."""
+    links = item.find_elements(By.CSS_SELECTOR, "a[href^='/']")
+    if not links:
+        return None
+
+    href = links[0].get_attribute("href").rstrip("/")
+    username = href.rsplit("/", 1)[-1]
+    if not username or username in {"accounts", "explore", "reels"}:
+        return None
+    return username, "follows you" in item.text.casefold()
+
+
 def check(users: list[str] | None = None) -> None:
     """Check selected accounts or the full following list."""
     if users:
@@ -56,41 +67,43 @@ def check(users: list[str] | None = None) -> None:
     driver = create_driver()
     users_follow_back: list[str] = []
     users_dont_follow_back: list[str] = []
-    users_not_found: list[str] = []
 
     try:
         login_instagram(driver)
-        driver.get(f"https://www.instagram.com/{ACCOUNT_USERNAME}/following")
+        account_username = os.getenv("INSTAGRAM_USERNAME")
+        if not account_username:  # Kept for type narrowing and direct calls to this function.
+            raise RuntimeError("Set INSTAGRAM_USERNAME in .env")
+        driver.get(f"https://www.instagram.com/{account_username}/following")
 
         scroll_div = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CLASS_NAME, "_aano"))
         )
-        previous_count = -1
+        seen_users: set[str] = set()
 
         while True:
-            user_divs = driver.find_elements(By.CSS_SELECTOR, "div._aacl._aaco._aacu._aacx._aada")
-            current_count = len(user_divs)
-            if current_count == previous_count:
-                break
-            previous_count = current_count
-
-            for element in user_divs:
-                username = element.text.strip().split("\n")[0]
-                if not username:
-                    continue
+            items = driver.find_elements(By.CSS_SELECTOR, "div[role='dialog'] li")
+            new_users = 0
+            for item in items:
                 try:
-                    element.click()
-                    WebDriverWait(driver, 10).until(EC.url_contains(username))
-                    driver.back()
-                    users_follow_back.append(username)
-                except (NoSuchElementException, StaleElementReferenceException):
-                    users_not_found.append(username)
+                    result = username_and_follows_you(item)
+                except StaleElementReferenceException:
+                    continue
+                if result is None:
+                    continue
+                username, follows_you = result
+                if username in seen_users:
+                    continue
+                seen_users.add(username)
+                new_users += 1
+                (users_follow_back if follows_you else users_dont_follow_back).append(username)
+
+            if new_users == 0:
+                break
 
             scroll_div.send_keys(Keys.END)
 
         write_user_list("users_follow_back.txt", sorted(set(users_follow_back)))
         write_user_list("users_dont_follow_back.txt", sorted(set(users_dont_follow_back)))
-        write_user_list("users_not_found.txt", sorted(set(users_not_found)))
     finally:
         driver.quit()
 
@@ -100,8 +113,12 @@ def check_certain_users(users: list[str]) -> None:
     try:
         login_instagram(driver)
         for username in users:
-            driver.get(f"https://www.instagram.com/{username}/following/")
-            print(f"Checked @{username}")
+            driver.get(f"https://www.instagram.com/{username}/")
+            body = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.TAG_NAME, "body"))
+            )
+            status = "follows you" in body.text.casefold()
+            print(f"@{username}: {'follows you' if status else 'does not follow you'}")
     finally:
         driver.quit()
 

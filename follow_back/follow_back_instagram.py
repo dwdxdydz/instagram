@@ -1,48 +1,53 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+"""Print accounts from an Instagram export that do not follow back.
+
+Pass the HTML files downloaded from Instagram's *Download your information*
+export, or place ``following.html`` and ``followers.html`` next to this file.
+"""
+
+import argparse
+from pathlib import Path
 
 from bs4 import BeautifulSoup
-from lxml import html
-import os
-
-# Get the directory path of the current script
-script_dir = os.path.dirname(os.path.abspath(__file__))
-
-following_file = os.path.join(script_dir, 'following.html')
-follower_file = os.path.join(script_dir, 'followers.html')
-
-with open(following_file, 'r') as file:
-    following = html.parse(file)
-
-with open(follower_file, 'r') as file:
-    follower = html.parse(file)
-
-following_page = html.tostring(following)
-follower_page = html.tostring(follower)
-
-following_soup = BeautifulSoup(following_page, features="html.parser")
-follower_soup = BeautifulSoup(follower_page, features="html.parser")
-
-following_list = following_soup.find_all("a", {"target": "_blank"})
-follower_list = follower_soup.find_all("a", {"target": "_blank"})
-
-following_list_stored = []
-follower_list_stored = []
-
-for following_account_raw in following_list:
-    for following_account in following_account_raw:
-        following_list_stored.append(following_account)
-
-for follower_account_raw in follower_list:
-    for follower_account in follower_account_raw:
-        follower_list_stored.append(follower_account)
-
-count = 0
-print("The usenames below don't follow you back: \n")
-
-for account_check in following_list_stored:
-    if account_check not in follower_list_stored:
-        print(account_check)
-        count += 1
 
 
-print(f'\n\nTotal users who don\'t follow you back = {count}')
+def read_usernames(filename: Path) -> set[str]:
+    """Return usernames linked by an Instagram export HTML file.
+
+    Instagram exports use one anchor per account.  Reading the anchor text,
+    rather than iterating over its children, also works when an anchor contains
+    formatting tags or whitespace.
+    """
+    try:
+        document = filename.read_text(encoding="utf-8")
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Instagram export file not found: {filename}") from exc
+
+    soup = BeautifulSoup(document, "html.parser")
+    return {
+        anchor.get_text(strip=True)
+        for anchor in soup.find_all("a", target="_blank")
+        if anchor.get_text(strip=True)
+    }
+
+
+def accounts_not_following_back(following_file: Path, followers_file: Path) -> list[str]:
+    """Return sorted accounts followed by the user but absent from followers."""
+    return sorted(read_usernames(following_file) - read_usernames(followers_file), key=str.casefold)
+
+
+def main() -> None:
+    script_dir = Path(__file__).resolve().parent
+    parser = argparse.ArgumentParser(description="Find Instagram accounts that do not follow back")
+    parser.add_argument("--following", type=Path, default=script_dir / "following.html")
+    parser.add_argument("--followers", type=Path, default=script_dir / "followers.html")
+    args = parser.parse_args()
+
+    accounts = accounts_not_following_back(args.following, args.followers)
+    print("The usernames below don't follow you back:\n")
+    print("\n".join(accounts))
+    print(f"\nTotal users who don't follow you back = {len(accounts)}")
+
+
+if __name__ == "__main__":
+    main()
