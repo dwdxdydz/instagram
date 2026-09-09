@@ -1,18 +1,34 @@
-# Instagram Browser Automation — Archived
+# 📷 Instagram Browser Automation — Archived
 
-> **Status: archived / personal experiment.** This repository is not recommended as a portfolio project.
+> **Status: archived / personal experiment**
 
-The project contains Selenium-based experiments for checking Instagram profiles and sending reels. These workflows depend on Instagram's changing web UI and may break without notice.
+This repository contains Selenium-based browser-automation experiments for checking Instagram profiles and sending reels. It is retained as a learning project and is **not recommended as a primary portfolio project**.
+
+## What it demonstrates
+
+- Selenium browser automation
+- DOM interaction and element selection
+- Basic automation workflows
+- Environment-based credential configuration
+- Automated tests around selected helper logic
 
 ## Why it is archived
 
-- Platform-specific CSS/DOM selectors are brittle.
-- Browser automation is difficult to test reliably without a live account.
-- Authentication and anti-automation behavior can change independently of the code.
-- The project does not demonstrate as much transferable engineering value as the other portfolio projects in this account.
+The workflows depend heavily on Instagram's changing web interface, so selectors and browser flows can break without notice. Authentication, anti-automation behavior, and platform policies can also change independently of the code.
 
-Credentials must never be committed. Use environment variables for any local experimentation and follow the platform's current terms and policies.
+The project has less transferable portfolio value than the other repositories, so it should remain secondary on a resume or portfolio.
+
+## Security
+
+Never commit credentials, session data, or secrets. Use environment variables for local experimentation and follow the platform's current terms and policies.
 
 ## Portfolio recommendation
 
-Keep this repository available as a personal experiment, but prioritize **Flight-Alert-System**, **RAG-Sytem**, **Fourier-Image-Drawing**, **Seq2Seq-Model**, **sudoku**, and **LRU-Cache** on a resume or portfolio.
+Prioritize these projects instead:
+
+1. **Flight-Alert-System** — automation, MySQL, analytics, dashboarding
+2. **RAG-Sytem** — AI, NLP, retrieval, vector search
+3. **Fourier-Image-Drawing** — mathematical modelling and visualization
+4. **Seq2Seq-Model** — deep learning and NLP
+5. **sudoku** — algorithms and constraint solving
+6. **LRU-Cache** — data structures and performance
