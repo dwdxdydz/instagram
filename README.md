@@ -1,34 +1,84 @@
 # 📷 Instagram Browser Automation — Archived
 
-> **Status: archived / personal experiment**
+> **Status: Archived / Personal Learning Project**
 
-This repository contains Selenium-based browser-automation experiments for checking Instagram profiles and sending reels. It is retained as a learning project and is **not recommended as a primary portfolio project**.
+## What is this project?
 
-## What it demonstrates
+This project contains experiments for **automating actions in a web browser on Instagram**.
 
-- Selenium browser automation
-- DOM interaction and element selection
-- Basic automation workflows
-- Environment-based credential configuration
-- Automated tests around selected helper logic
+Instead of manually performing every browser action, the program uses Selenium to open the website and interact with page elements.
 
-## Why it is archived
+The project was mainly created to learn how browser automation works.
 
-The workflows depend heavily on Instagram's changing web interface, so selectors and browser flows can break without notice. Authentication, anti-automation behavior, and platform policies can also change independently of the code.
+## What can it do?
 
-The project has less transferable portfolio value than the other repositories, so it should remain secondary on a resume or portfolio.
+The repository contains experiments related to:
+
+- Checking Instagram profiles.
+- Checking whether accounts follow back.
+- Sending reels through an automated browser workflow.
+- Finding and interacting with webpage elements.
+
+## How does browser automation work?
+
+The basic idea is:
+
+```text
+Python program
+      ↓
+Open browser
+      ↓
+Open Instagram
+      ↓
+Find a page element
+      ↓
+Click / read / interact
+      ↓
+Continue the workflow
+```
+
+Selenium acts like a program-controlled browser.
+
+## Why is this repository archived?
+
+Instagram's website can change its page structure and element names. When that happens, an automation script that depends on the old structure can stop working.
+
+The platform can also change its login systems, anti-automation protections and policies.
+
+Because of this, this repository is kept as a **learning experiment** rather than a main portfolio project.
 
 ## Security
 
-Never commit credentials, session data, or secrets. Use environment variables for local experimentation and follow the platform's current terms and policies.
+Never put passwords, session information, API keys or other secrets directly in the source code.
+
+Use environment variables for local experiments and always follow the platform's current rules and terms.
+
+## Main technologies
+
+- **Python** — automation logic
+- **Selenium** — controls the web browser
+- **Environment variables** — keep credentials outside the code
+- **Pytest** — tests selected helper logic
+
+## What I learned
+
+This project helped demonstrate:
+
+- Browser automation
+- Finding webpage elements
+- Automating multi-step workflows
+- Working with environment variables
+- Writing tests
 
 ## Portfolio recommendation
 
-Prioritize these projects instead:
+This is not one of the projects I would highlight first when applying for jobs.
 
-1. **Flight-Alert-System** — automation, MySQL, analytics, dashboarding
-2. **RAG-Sytem** — AI, NLP, retrieval, vector search
-3. **Fourier-Image-Drawing** — mathematical modelling and visualization
-4. **Seq2Seq-Model** — deep learning and NLP
-5. **sudoku** — algorithms and constraint solving
+The stronger portfolio projects are:
+
+1. **Flight-Alert-System** — flight-price monitoring, MySQL, analytics and automation
+2. **RAG-Sytem** — document AI and semantic search
+3. **Fourier-Image-Drawing** — mathematics, image processing and visualization
+4. **Seq2Seq-Model** — machine translation and deep learning
+5. **sudoku** — algorithms and problem solving
 6. **LRU-Cache** — data structures and performance
