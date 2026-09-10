@@ -4,9 +4,9 @@
 
 ## What is this project?
 
-This project contains experiments for **automating actions in a web browser on Instagram**.
+This repository contains experiments for **automating actions in a web browser on Instagram**.
 
-Instead of manually performing every browser action, the program uses Selenium to open the website and interact with page elements.
+Instead of manually performing every browser action, the Python program uses Selenium to open the website and interact with page elements.
 
 The project was mainly created to learn how browser automation works.
 
@@ -14,10 +14,10 @@ The project was mainly created to learn how browser automation works.
 
 The repository contains experiments related to:
 
-- Checking Instagram profiles.
-- Checking whether accounts follow back.
-- Sending reels through an automated browser workflow.
-- Finding and interacting with webpage elements.
+- Checking Instagram profiles
+- Checking whether accounts follow back
+- Sending reels through an automated browser workflow
+- Finding and interacting with webpage elements
 
 ## How does browser automation work?
 
@@ -28,7 +28,7 @@ Python program
       ↓
 Open browser
       ↓
-Open Instagram
+Open website
       ↓
 Find a page element
       ↓
@@ -37,42 +37,56 @@ Click / read / interact
 Continue the workflow
 ```
 
-Selenium acts like a program-controlled browser.
+Selenium acts like a browser that the program can control.
 
 ## Why is this repository archived?
 
-Instagram's website can change its page structure and element names. When that happens, an automation script that depends on the old structure can stop working.
-
-The platform can also change its login systems, anti-automation protections and policies.
+A browser automation project depends on the website it controls. If Instagram changes its page structure, button names, login flow or anti-automation behaviour, the script may stop working.
 
 Because of this, this repository is kept as a **learning experiment** rather than a main portfolio project.
 
 ## Security
 
-Never put passwords, session information, API keys or other secrets directly in the source code.
+Never put passwords, session information, API keys or other secrets directly in source code.
 
-Use environment variables for local experiments and always follow the platform's current rules and terms.
+Use environment variables for local experiments and follow the platform's current rules and terms.
 
 ## Main technologies
 
-- **Python** — automation logic
-- **Selenium** — controls the web browser
-- **Environment variables** — keep credentials outside the code
-- **Pytest** — tests selected helper logic
+- **Python** — application and automation logic
+- **Selenium** — controls a real web browser from code
+- **Environment variables** — keep sensitive configuration outside the source code
+- **Pytest** — tests selected parts of the code
 
-## What I learned
+## Technical terms explained
 
-This project helped demonstrate:
+**Browser automation** — Using a program to perform actions in a web browser that a person would normally perform manually.
 
-- Browser automation
-- Finding webpage elements
-- Automating multi-step workflows
-- Working with environment variables
-- Writing tests
+**Selenium** — A tool that allows Python and other programming languages to control web browsers, such as opening pages, finding elements and clicking them.
+
+**Web element / page element** — A part of a webpage that the browser represents separately, such as a button, text field, link or image.
+
+**DOM (Document Object Model)** — The structure a browser creates from a webpage's HTML. Programs such as Selenium can use this structure to find and interact with elements.
+
+**Selector** — A way of telling Selenium which webpage element you want to find, for example by its HTML attributes or text.
+
+**Environment variable** — A value stored outside the source code and provided to the application when it runs. It is commonly used for configuration and secrets.
+
+**Pytest** — A Python testing framework used to write and run automated tests.
+
+**Session information** — Information that can keep a user logged in to a website. It should be treated as sensitive data.
+
+## What does this project demonstrate?
+
+This project demonstrates the basic workflow behind browser automation:
+
+**Python → browser control → webpage elements → automated actions → testing**
+
+It demonstrates **Python, Selenium, browser automation, DOM interaction, environment-based configuration and testing**.
 
 ## Portfolio recommendation
 
-This is not one of the projects I would highlight first when applying for jobs.
+This repository should not be one of the first projects shown to recruiters. It is retained as a personal learning experiment.
 
 The stronger portfolio projects are:
 
